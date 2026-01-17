@@ -1,0 +1,19 @@
+<?php
+$localhost = "----";
+$username  = "----";
+$password  = "----";
+$database  = "----";
+
+$conn = new mysqli($localhost, $username, $password, $database);
+
+$sql = "SELECT rpm, vel, ldr, dist, farol, buzina 
+        FROM sensores 
+        ORDER BY id_sensor DESC 
+        LIMIT 1";
+
+$result = $conn->query($sql);
+$dados = $result->fetch_assoc();
+
+echo json_encode($dados);
+$conn->close();
+?>
