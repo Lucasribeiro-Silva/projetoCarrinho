@@ -1,0 +1,150 @@
+<?php
+$localhost = "----";
+$username  = "----";
+$password  = "----";
+$database  = "----";
+
+$conn = new mysqli($localhost, $username, $password, $database);
+
+if ($conn->connect_error) {
+    die("Falha na conexão: " . $conn->connect_error);
+}
+
+$sql = "SELECT rpm, vel, ldr, dist, farol, buzina 
+        FROM sensores 
+        ORDER BY id_sensor DESC 
+        LIMIT 1";
+
+$result = $conn->query($sql);
+$dados = $result->fetch_assoc();
+
+$conn->close();
+?>
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Carrinho IoT</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="painel">
+        <h1>Painel Carrinho IoT</h1>
+
+        <div class="dados">
+
+            <div class="caixa">
+                <div class="titulo">ROTAÇÃO</div>
+                <div class="valor"><?= $dados["rpm"] ?></div>
+                <div class="unidade">RPM</div>
+            </div>
+
+            <div class="caixa">
+                <div class="titulo">VELOCIDADE</div>
+                <div class="valor"><?= $dados["vel"] ?></div>
+                <div class="unidade">KM/H</div>
+            </div>
+
+            <div class="caixa">
+                <div class="titulo">DISTÂNCIA</div>
+                <div class="valor"><?= $dados["dist"] ?></div>
+                <div class="unidade">CM</div>
+            </div>
+
+            <div class="caixa">
+                <div class="titulo">LUMINOSIDADE</div>
+                <div class="valor"><?= $dados["ldr"] ?></div>
+                <div class="unidade">Ω Ohm</div>
+            </div>
+
+        </div>
+
+        <div class="icone-clima">
+            <div id="icone-luz" class="emoji-icone">🌙</div>
+        </div>
+
+        <div class="indicadores">
+
+            <div class="indicador farol <?= ($dados["farol"] == 'ligado' ? 'ligado' : '') ?>">
+                <div class="icone">💡</div>
+                <div>FAROL</div>
+            </div>
+
+            <div class="indicador buzina <?= ($dados["buzina"] == 'ligado' ? 'ligado' : '') ?>">
+                <div class="icone">📢</div>
+                <div>BUZINA</div>
+            </div>
+
+        </div>
+
+        <div class="alerta <?= ($dados["dist"] <= 10 ? 'mostrar' : '') ?>">
+            OBJETO MUITO PRÓXIMO!
+        </div>
+
+    </div>
+
+<script>
+
+function atualizarDados() {
+    fetch("leitura.php")
+        .then(res => res.json())
+        .then(dados => {
+
+            document.querySelector(".caixa:nth-child(1) .valor").innerText = dados.rpm;
+            document.querySelector(".caixa:nth-child(2) .valor").innerText = dados.vel;
+            document.querySelector(".caixa:nth-child(3) .valor").innerText = dados.dist;
+            document.querySelector(".caixa:nth-child(4) .valor").innerText = dados.ldr;
+
+            // FAROL
+            const farol = document.querySelector(".indicador.farol");
+            if (dados.farol === "1") farol.classList.add("ligado");
+            else farol.classList.remove("ligado");
+
+            // BUZINA
+            const buzina = document.querySelector(".indicador.buzina");
+            if (dados.buzina === "1") buzina.classList.add("ligado");
+            else buzina.classList.remove("ligado");
+
+            // ALERTA
+            const alerta = document.querySelector(".alerta");
+            if (dados.dist <= 10) alerta.classList.add("mostrar");
+            else alerta.classList.remove("mostrar");
+
+            // Ajudtar tema conforme valor do LDR
+            atualizarTemaPorLDR(dados.ldr);
+        });
+}
+
+setInterval(atualizarDados, 1000);
+
+atualizarTemaPorLDR(<?= $dados["ldr"] ?>);
+
+function atualizarTemaPorLDR(ldr) {
+    let root = document.documentElement;
+    let icone = document.getElementById("icone-luz");
+
+    if (ldr <= 150) {
+        root.style.setProperty('--bg-cor', '#0a1a3a');
+        root.style.setProperty('--caixa-cor', '#142b55');
+        icone.textContent = "🌙";
+    } 
+    else if (ldr <= 300) {
+        root.style.setProperty('--bg-cor', '#35476c');
+        root.style.setProperty('--caixa-cor', '#44577c');
+        icone.textContent = "🌅";
+    } 
+    else {
+        root.style.setProperty('--bg-cor', '#76a9ff');
+        root.style.setProperty('--caixa-cor', '#9ac0ff');
+        icone.textContent = "☀️";
+    }
+}
+
+</script>
+
+</body>
+</html>
+
