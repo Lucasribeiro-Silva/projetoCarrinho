@@ -1,6 +1,6 @@
 # 🚗 Carrinho Bluetooth com Arduino
 
-Projeto desenvolvido durante o curso **Técnico em Desenvolvimento de Sistemas**, com foco em integração entre hardware e software.
+Projeto desenvolvido durante o curso **Técnico em Desenvolvimento de Sistemas** (SENAI - Curitiba), com foco em integração entre hardware e software.
 
 ## 📌 Descrição
 Sistema de controle de um carrinho via Bluetooth, permitindo o envio de comandos e a comunicação entre **Arduino, Python e PHP**, com integração para exibição e envio de dados a um banco de dados.
@@ -64,10 +64,10 @@ Todo o código foi **analisado, compreendido, testado e adaptado** por mim e pel
 
 ## 👥 Créditos
 Projeto desenvolvido em grupo por:
-- Lucas (Eu)
-- Milena
-- Pedro
-- Kelvyn
+- **Lucas Ribeiro da Silva**
+- **Milena**
+- **Pedro**
+- **Kelvyn**
 
 Agradecimento especial ao **Professor Pararella**, que disponibilizou seus domínios para possibilitar a publicação do site do projeto.
 
