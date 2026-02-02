@@ -39,7 +39,7 @@ https://carrinho.paparella.com.br/
 - Integração entre hardware e software
 
 ## 🎮 Requisitos para funcionamento
-- Controle **PS4 ou PS5** (necessário para o controle do carrinho)
+- Controle com **Bluetooth** (necessário para o controle do carrinho)
 - Carrinho com Arduino e módulo Bluetooth configurado
 - Computador para execução do código em Python
 
@@ -47,7 +47,7 @@ https://carrinho.paparella.com.br/
 Foi utilizada **Inteligência Artificial como ferramenta de apoio** no desenvolvimento do projeto, principalmente para:
 
 - Auxílio na criação e ajuste do código em **Python**, com foco em:
-  - Configuração do controle (PS4/PS5)
+  - Configuração do controle
   - Redução de latência nos movimentos do carrinho
   - Organização do código para envio limpo de dados ao banco de dados
 - Auxílio na utilização e estruturação do código em **PHP**
